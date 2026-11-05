@@ -1,4 +1,4 @@
-# 🎓 Student Information Management System
+# Student Information Management System
 
 A full-stack **three-tier cloud architecture** application for managing student records.
 
@@ -10,12 +10,13 @@ A full-stack **three-tier cloud architecture** application for managing student 
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 student-management-system/
 ├── backend/
 │   ├── server.js              # Express app entry point
+│   ├── mcp-server.js          # MCP server for AI agent integration
 │   ├── package.json
 │   ├── .env.example           # Environment variable template
 │   ├── .gitignore
@@ -55,7 +56,7 @@ student-management-system/
 
 ---
 
-## 🚀 Local Development Setup
+## Local Development Setup
 
 ### Prerequisites
 - Node.js v18+
@@ -132,7 +133,6 @@ npm install
 
 # Create your .env file
 copy .env.example .env   # Windows
-# For local dev, the default value (empty) uses the Vite proxy
 ```
 
 `frontend/.env` for **local development** (uses Vite proxy):
@@ -150,7 +150,7 @@ Open [http://localhost:5173](http://localhost:5173) in your browser.
 
 ---
 
-## 🌐 API Endpoints
+## API Endpoints
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
@@ -205,7 +205,62 @@ curl http://localhost:5000/api/students/stats
 
 ---
 
-## ☁️ Deployment
+## MCP Server (AI Agent Integration)
+
+This project ships with an **MCP (Model Context Protocol) server** that exposes all student CRUD operations as AI-callable tools, compatible with Claude Desktop and Antigravity.
+
+### Available Tools
+
+| Tool | Description |
+|------|-------------|
+| `list_students` | Get all students — supports `search`, `department`, `semester`, `page`, `limit` filters |
+| `get_student` | Fetch a single student by MongoDB `_id` |
+| `get_stats` | Dashboard stats (totals, by department, by semester, recent count) |
+| `create_student` | Add a new student record |
+| `update_student` | Update an existing student by `_id` |
+| `delete_student` | Delete a student by `_id` |
+
+### Running the MCP Server
+
+Make sure the backend REST API is running first (`npm run dev` in `/backend`), then:
+
+```bash
+cd student-management-system/backend
+npm run mcp
+```
+
+Or run it directly:
+```bash
+node mcp-server.js
+```
+
+### Connecting to Claude Desktop
+
+Add this block to your Claude Desktop config (`claude_desktop_config.json`):
+
+```json
+{
+  "mcpServers": {
+    "student-management": {
+      "command": "node",
+      "args": ["<absolute-path>/student-management-system/backend/mcp-server.js"],
+      "env": {
+        "BACKEND_URL": "http://localhost:5000"
+      }
+    }
+  }
+}
+```
+
+### Environment Variable
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `BACKEND_URL` | `http://localhost:5000` | URL of the running Express REST API |
+
+---
+
+## Deployment
 
 ### Deploy Backend to Render
 
@@ -222,17 +277,11 @@ curl http://localhost:5000/api/students/stats
    - **Instance Type**: Free
 6. Add **Environment Variables**:
    - `MONGODB_URI` = your MongoDB Atlas connection string
-   - `PORT` = `5000` (Render may override this automatically)
+   - `PORT` = `5000`
    - `FRONTEND_URL` = (leave blank for now, update after Netlify deploy)
    - `NODE_ENV` = `production`
 7. Click **"Create Web Service"**.
 8. Wait for deployment — you'll get a URL like: `https://student-management-backend.onrender.com`
-9. Test the deployed health endpoint:
-   ```
-   https://your-render-url.onrender.com/api/health
-   ```
-10. Go back to Render **Environment Variables** and set:
-    - `FRONTEND_URL` = your Netlify URL (after deploying frontend)
 
 ### Deploy Frontend to Netlify
 
@@ -246,16 +295,13 @@ curl http://localhost:5000/api/students/stats
 5. Add **Environment Variables**:
    - `VITE_API_URL` = your Render backend URL (e.g., `https://student-management-backend.onrender.com`)
 6. Click **"Deploy site"**.
-7. Your site will be deployed at a URL like: `https://your-site.netlify.app`
-8. Go back to Render and update `FRONTEND_URL` to this Netlify URL.
-9. Also go back to MongoDB Atlas **Network Access** and ensure Render's IPs are allowed.
 
 > **Note**: On Render's free tier, the service "sleeps" after 15 minutes of inactivity.
-> The first request after sleep may take 30–60 seconds to respond.
+> The first request after sleep may take 30-60 seconds to respond.
 
 ---
 
-## ✅ Testing Checklist
+## Testing Checklist
 
 ### Functional Tests
 
@@ -294,7 +340,7 @@ curl http://localhost:5000/api/students/stats
 
 ---
 
-## 🔒 Security Notes
+## Security Notes
 
 - MongoDB credentials are **never** exposed to the frontend
 - `.env` files are git-ignored
@@ -304,7 +350,7 @@ curl http://localhost:5000/api/students/stats
 
 ---
 
-## 🛠️ Student Data Model
+## Student Data Model
 
 ```
 studentId  : String  — unique, required, uppercase
@@ -319,62 +365,7 @@ updatedAt  : Date    — auto-generated
 
 ---
 
-## 🤖 MCP Server (AI Agent Integration)
-
-This project ships with an **MCP (Model Context Protocol) server** that exposes all student CRUD operations as AI-callable tools.
-
-### Available Tools
-
-| Tool | Description |
-|------|-------------|
-| `list_students` | Get all students — supports `search`, `department`, `semester`, `page`, `limit` filters |
-| `get_student` | Fetch a single student by MongoDB `_id` |
-| `get_stats` | Dashboard stats (totals, by department, by semester, recent count) |
-| `create_student` | Add a new student record |
-| `update_student` | Update an existing student by `_id` |
-| `delete_student` | Delete a student by `_id` |
-
-### Running the MCP Server
-
-Make sure the backend REST API is running first (`npm run dev` in `/backend`), then:
-
-```bash
-cd student-management-system/backend
-npm run mcp
-```
-
-Or run it directly:
-```bash
-node mcp-server.js
-```
-
-### Connecting to Claude Desktop
-
-Add this to your Claude Desktop config (`claude_desktop_config.json`):
-
-```json
-{
-  "mcpServers": {
-    "student-management": {
-      "command": "node",
-      "args": ["<absolute-path>/student-management-system/backend/mcp-server.js"],
-      "env": {
-        "BACKEND_URL": "http://localhost:5000"
-      }
-    }
-  }
-}
-```
-
-### Environment Variable
-
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `BACKEND_URL` | `http://localhost:5000` | URL of the running Express REST API |
-
----
-
-## 📞 Support
+## Support
 
 This project was built as a demonstration of a three-tier cloud architecture:
 - **React.js** (Frontend) on **Netlify**
@@ -382,5 +373,3 @@ This project was built as a demonstration of a three-tier cloud architecture:
 - **MongoDB Atlas** (Database) on Cloud
 
 All CRUD operations interact with the real MongoDB Atlas database through the REST API.
-#   S t u d e n t _ M a n a g e m e n t _ S y s t e m  
- 
