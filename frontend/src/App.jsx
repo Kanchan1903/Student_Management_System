@@ -113,12 +113,12 @@ const App = () => {
             </div>
 
             <div className="topbar-user" onClick={() => navigate('/settings')}>
-              <div className="topbar-user-avatar">
-                JD
+              <div className="topbar-user-avatar" style={{ background: '#ede5fc', color: '#7c3aed' }}>
+                FC
               </div>
               <div className="topbar-user-info">
-                <span className="topbar-user-name">John Doe</span>
-                <span className="topbar-user-role">3rd year</span>
+                <span className="topbar-user-name">Faculty Member</span>
+                <span className="topbar-user-role">Administrator</span>
               </div>
             </div>
           </div>

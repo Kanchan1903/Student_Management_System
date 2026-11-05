@@ -16,7 +16,7 @@ const Dashboard = ({ showNotification }) => {
       setError('');
       const [statsRes, studentsRes] = await Promise.all([
         getStats(),
-        getAllStudents({ limit: 6 }),
+        getAllStudents({ limit: 8 }),
       ]);
       setStats(statsRes.data.data);
       setRecent(studentsRes.data.data || []);
@@ -31,7 +31,6 @@ const Dashboard = ({ showNotification }) => {
     fetchDashboardData();
   }, [fetchDashboardData]);
 
-  // Formatted date matching screenshot: "September 4, 2023"
   const todayFormatted = new Date().toLocaleDateString('en-US', {
     month: 'long',
     day: 'numeric',
@@ -64,101 +63,105 @@ const Dashboard = ({ showNotification }) => {
   }
 
   const totalCount = stats?.total ?? 0;
-  const deptCount = stats?.byDepartment?.length ?? 0;
-  const semCount = stats?.bySemester?.length ?? 0;
+  const deptCount  = stats?.byDepartment?.length ?? 0;
+  const recentCount = stats?.recentCount ?? 0;
 
   return (
     <div className="dashboard">
-      {/* ── Purple Hero Banner with Avatar matching UI Reference ── */}
+      {/* ── Faculty Purple Hero Banner ── */}
       <section className="hero-banner">
         <div className="hero-banner-content">
           <div className="hero-banner-date">{todayFormatted}</div>
-          <h1 className="hero-banner-title">Welcome back, John!</h1>
+          <h1 className="hero-banner-title">Faculty & Administration Portal</h1>
           <p className="hero-banner-subtitle">
-            Always stay updated in your student portal
+            Manage student registrations, academic records, and department statistics in real time.
           </p>
         </div>
         <div className="hero-banner-illustration">
-          <div className="hero-banner-char" title="Student Avatar">
-            🎓
+          <div className="hero-banner-char" title="Faculty Portal">
+            👨‍🏫
           </div>
         </div>
       </section>
 
-      {/* ── Two-Column Layout matching UI Reference ── */}
+      {/* ── Two-Column Layout ── */}
       <div className="dashboard-columns">
-        {/* Left main column: Finance + Enrolled Courses */}
+        {/* Left Column */}
         <div className="dashboard-left">
-          {/* Finance Section */}
+          {/* Academic Overview / Stats Row */}
           <section>
             <div className="section-header">
-              <h2 className="section-title">Finance</h2>
+              <h2 className="section-title">Academic Overview</h2>
+              <Link to="/students" className="section-link">Manage Records</Link>
             </div>
             <div className="finance-cards-row">
-              {/* Card 1: Total Students / Payable */}
-              <div
-                className="finance-card"
-                onClick={() => navigate('/students')}
-                title="View Students"
-              >
-                <div className="finance-icon-box">
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <line x1="12" y1="1" x2="12" y2="23"/>
-                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-                  </svg>
-                </div>
-                <div className="finance-value">$ 10,000</div>
-                <div className="finance-label">Total Payable</div>
-              </div>
-
-              {/* Card 2: Total Paid (Highlighted with border) */}
+              {/* Card 1: Total Enrolled Students */}
               <div
                 className="finance-card highlight"
                 onClick={() => navigate('/students')}
-                title="Total Enrolled"
+                title="Click to view all registered students"
               >
                 <div className="finance-icon-box" style={{ background: '#ede5fc', color: '#7c3aed' }}>
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <rect x="2" y="4" width="20" height="16" rx="2"/>
-                    <line x1="12" y1="8" x2="12" y2="16"/>
-                    <line x1="8" y1="12" x2="16" y2="12"/>
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                    <circle cx="9" cy="7" r="4"/>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
                   </svg>
                 </div>
-                <div className="finance-value">$ 5,000</div>
-                <div className="finance-label">Total Paid</div>
+                <div className="finance-value">{totalCount}</div>
+                <div className="finance-label">Total Enrolled Students</div>
               </div>
 
-              {/* Card 3: Others */}
-              <div className="finance-card" onClick={() => navigate('/reports')}>
+              {/* Card 2: Active Departments */}
+              <div
+                className="finance-card"
+                onClick={() => navigate('/departments')}
+                title="View Departments"
+              >
                 <div className="finance-icon-box">
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <line x1="18" y1="20" x2="18" y2="10"/>
-                    <line x1="12" y1="20" x2="12" y2="4"/>
-                    <line x1="6" y1="20" x2="6" y2="14"/>
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
                   </svg>
                 </div>
-                <div className="finance-value">$ 300</div>
-                <div className="finance-label">Others</div>
+                <div className="finance-value">{deptCount}</div>
+                <div className="finance-label">Active Departments</div>
+              </div>
+
+              {/* Card 3: Recent Enrollments */}
+              <div
+                className="finance-card"
+                onClick={() => navigate('/reports')}
+                title="View Reports"
+              >
+                <div className="finance-icon-box">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                    <polyline points="17 6 23 6 23 12"/>
+                  </svg>
+                </div>
+                <div className="finance-value">+{recentCount}</div>
+                <div className="finance-label">New This Week</div>
               </div>
             </div>
           </section>
 
-          {/* Enrolled Courses Section */}
+          {/* Quick Actions / Department Links */}
           <section>
             <div className="section-header">
-              <h2 className="section-title">Enrolled Courses</h2>
+              <h2 className="section-title">Department Faculties</h2>
               <Link to="/departments" className="section-link">See all</Link>
             </div>
             <div className="courses-grid">
-              {/* Course 1 */}
               <div className="course-card">
                 <div className="course-card-left">
-                  <div className="course-card-title">Object oriented programming</div>
+                  <div className="course-card-title">Computer Science & Engineering</div>
                   <button
                     className="btn-pill-action"
                     onClick={() => navigate('/students?department=Computer+Science')}
                   >
-                    View
+                    View Students
                   </button>
                 </div>
                 <div className="course-card-icon">
@@ -170,15 +173,14 @@ const Dashboard = ({ showNotification }) => {
                 </div>
               </div>
 
-              {/* Course 2 */}
               <div className="course-card">
                 <div className="course-card-left">
-                  <div className="course-card-title">Fundamentals of database systems</div>
+                  <div className="course-card-title">Information Technology & Systems</div>
                   <button
                     className="btn-pill-action"
-                    onClick={() => navigate('/departments')}
+                    onClick={() => navigate('/students?department=Information+Technology')}
                   >
-                    View
+                    View Students
                   </button>
                 </div>
                 <div className="course-card-icon">
@@ -192,11 +194,14 @@ const Dashboard = ({ showNotification }) => {
             </div>
           </section>
 
-          {/* Live Records Table */}
+          {/* Real Students Roster */}
           <section style={{ marginTop: '4px' }}>
             <div className="section-header">
-              <h2 className="section-title">Recent Registered Students ({totalCount})</h2>
-              <Link to="/students" className="section-link">View table</Link>
+              <h2 className="section-title">Student Roster ({totalCount} Registered)</h2>
+              <div style={{ display: 'flex', gap: '10px' }}>
+                <Link to="/add-student" className="btn btn-primary btn-sm">+ Register Student</Link>
+                <Link to="/students" className="section-link">View all</Link>
+              </div>
             </div>
             <div className="table-wrapper">
               <table className="table">
@@ -206,29 +211,31 @@ const Dashboard = ({ showNotification }) => {
                     <th>Name</th>
                     <th>Department</th>
                     <th>Semester</th>
+                    <th>Contact</th>
                     <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
                   {recentStudents.length === 0 ? (
                     <tr>
-                      <td colSpan="5" style={{ textAlign: 'center', padding: '24px', color: 'var(--color-text-muted)' }}>
-                        No students added yet. <Link to="/add-student" style={{ color: 'var(--color-primary)', fontWeight: 700 }}>Add one here</Link>
+                      <td colSpan="6" style={{ textAlign: 'center', padding: '24px', color: 'var(--color-text-muted)' }}>
+                        No student records yet. <Link to="/add-student" style={{ color: 'var(--color-primary)', fontWeight: 700 }}>Add a student now</Link>
                       </td>
                     </tr>
                   ) : (
-                    recentStudents.slice(0, 4).map((s) => (
+                    recentStudents.slice(0, 5).map((s) => (
                       <tr key={s._id}>
                         <td><strong>{s.studentId}</strong></td>
                         <td>{s.name}</td>
                         <td><span className="badge badge-primary">{s.department}</span></td>
                         <td>Sem {s.semester}</td>
+                        <td>{s.contact || '—'}</td>
                         <td>
                           <button
                             className="btn btn-ghost btn-sm"
                             onClick={() => navigate('/students')}
                           >
-                            Details
+                            Edit / View
                           </button>
                         </td>
                       </tr>
@@ -240,47 +247,45 @@ const Dashboard = ({ showNotification }) => {
           </section>
         </div>
 
-        {/* Right side panel: Course Instructors + Daily Notice */}
+        {/* Right Column: Faculty & Quick Access */}
         <div className="dashboard-right">
-          {/* Instructors */}
           <section>
             <div className="section-header">
-              <h2 className="section-title">Course instructors</h2>
+              <h2 className="section-title">Department Heads</h2>
             </div>
             <div className="instructors-row">
-              <div className="instructor-avatar" title="Prof. Sarah Jenkins">
-                👩‍🏫
+              <div className="instructor-avatar" title="Prof. S. Sharma (Computer Science)">
+                💻
               </div>
-              <div className="instructor-avatar" title="Prof. Michael Chang">
-                👨‍💻
+              <div className="instructor-avatar" title="Dr. A. Verma (IT)">
+                🔬
               </div>
-              <div className="instructor-avatar" title="Dr. Robert Evans">
-                👨‍🔬
+              <div className="instructor-avatar" title="Prof. R. Patel (Electronics)">
+                ⚡
               </div>
             </div>
           </section>
 
-          {/* Daily notice card */}
           <section>
             <div className="section-header">
-              <h2 className="section-title">Daily notice</h2>
+              <h2 className="section-title">Administrative Notice</h2>
               <Link to="/reports" className="section-link">See all</Link>
             </div>
             <div className="notice-card">
               <div className="notice-item">
-                <h4 className="notice-title">Prelim payment due</h4>
+                <h4 className="notice-title">Semester Registration</h4>
                 <p className="notice-desc">
-                  Final submission for mid-term academic and lab dues is approaching next week.
+                  Enrollment for upcoming academic term is now open. Faculty can verify pending student forms.
                 </p>
-                <span className="notice-more">See more</span>
+                <Link to="/add-student" className="notice-more">Add Student</Link>
               </div>
 
               <div className="notice-item">
-                <h4 className="notice-title">Exam schedule</h4>
+                <h4 className="notice-title">Examination & Grades</h4>
                 <p className="notice-desc">
-                  Practical semester examinations timetable has been officially published on the portal.
+                  Grade submission deadline for mid-term assessments is scheduled for end of week.
                 </p>
-                <span className="notice-more">See more</span>
+                <Link to="/reports" className="notice-more">View Analytics</Link>
               </div>
             </div>
           </section>
