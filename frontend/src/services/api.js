@@ -10,7 +10,7 @@ const BASE_URL = rawApiUrl ? `${rawApiUrl}/api` : '/api';
 const api = axios.create({
   baseURL: BASE_URL,
   headers: { 'Content-Type': 'application/json' },
-  timeout: 15000,
+  timeout: 30000,
 });
 
 // ─── Response Interceptor ──────────────────────────────────────────
