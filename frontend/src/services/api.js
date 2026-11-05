@@ -1,9 +1,11 @@
 import axios from 'axios';
 
 // Use VITE_API_URL in production (Render URL), fall back to Vite proxy in dev
-const BASE_URL = import.meta.env.VITE_API_URL
-  ? `${import.meta.env.VITE_API_URL}/api`
-  : '/api';
+// Strip any trailing slashes to avoid double slashes like `https://...//api`
+const rawApiUrl = import.meta.env.VITE_API_URL
+  ? import.meta.env.VITE_API_URL.replace(/\/+$/, '')
+  : '';
+const BASE_URL = rawApiUrl ? `${rawApiUrl}/api` : '/api';
 
 const api = axios.create({
   baseURL: BASE_URL,
