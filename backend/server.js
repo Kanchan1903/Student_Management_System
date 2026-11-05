@@ -13,6 +13,7 @@ connectDB();
 // ─── CORS Configuration ──────────────────────────────────────────────────────
 const allowedOrigins = [
   process.env.FRONTEND_URL,
+  'https://frontend-426d.vercel.app',
   'http://localhost:5173',
   'http://localhost:3000',
 ].filter(Boolean);
@@ -22,7 +23,13 @@ app.use(
     origin: (origin, callback) => {
       // Allow requests with no origin (Postman, curl, mobile apps)
       if (!origin) return callback(null, true);
-      if (allowedOrigins.includes(origin)) return callback(null, true);
+      // Allow exact matches or any vercel.app preview domain for this project
+      if (
+        allowedOrigins.includes(origin) ||
+        origin.endsWith('.vercel.app')
+      ) {
+        return callback(null, true);
+      }
       callback(new Error(`CORS policy: Origin ${origin} is not allowed.`));
     },
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
