@@ -11,7 +11,7 @@ import Reports from './pages/Reports';
 import Settings from './pages/Settings';
 
 let notifCounter = 0;
-const SIDEBAR_COLLAPSED_KEY = 'college_sidebar_collapsed';
+const SIDEBAR_COLLAPSED_KEY = 'student_mgmt_sidebar_collapsed';
 
 const App = () => {
   const [notifications, setNotifications] = useState([]);
@@ -72,13 +72,13 @@ const App = () => {
             ☰
           </button>
           <span style={{ fontFamily: 'var(--font-display)', fontWeight: 800 }}>
-            COLLEGE FACULTY PORTAL
+            STUDENT MANAGEMENT
           </span>
         </div>
 
-        {/* ── Top Bar: College Faculty Theme ── */}
+        {/* ── Top Bar ── */}
         <header className="topbar">
-          <h1 className="topbar-title">Faculty Dashboard</h1>
+          <h1 className="topbar-title">Student Management</h1>
 
           <div className="topbar-search">
             <svg
@@ -98,7 +98,7 @@ const App = () => {
             <input
               type="text"
               className="topbar-search-input"
-              placeholder="Search students, roll numbers, departments, courses..."
+              placeholder="Search students by name, ID, email, or department..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={handleSearchSubmit}
@@ -106,17 +106,17 @@ const App = () => {
           </div>
 
           <div className="topbar-actions">
-            <div className="topbar-bell" title="Faculty Notices">
+            <div className="topbar-bell" title="Notifications">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
                 <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
               </svg>
-              <span className="topbar-bell-badge">3</span>
+              <span className="topbar-bell-badge">2</span>
             </div>
 
             <div className="topbar-user" onClick={() => navigate('/settings')}>
-              <div className="topbar-user-avatar" title="Faculty Profile">
-                FP
+              <div className="topbar-user-avatar" title="Administrator Profile">
+                AD
               </div>
             </div>
           </div>
@@ -137,7 +137,7 @@ const App = () => {
               element={
                 <div style={{ textAlign: 'center', padding: '100px 20px' }}>
                   <h2>Page Not Found</h2>
-                  <p style={{ color: 'var(--color-text-secondary)', marginTop: '8px' }}>The requested college resource doesn't exist.</p>
+                  <p style={{ color: 'var(--color-text-secondary)', marginTop: '8px' }}>The requested student resource doesn't exist.</p>
                 </div>
               }
             />

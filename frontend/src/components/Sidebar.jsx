@@ -15,10 +15,10 @@ const Icons = {
       <circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
     </svg>
   ),
-  faculty: (
+  addStudent: (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M12 14c4 0 8 2 8 4v2H4v-2c0-2 4-4 8-4z"/>
-      <circle cx="12" cy="7" r="4"/>
+      <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+      <circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="17" y1="11" x2="23" y2="11"/>
     </svg>
   ),
   departments: (
@@ -56,12 +56,12 @@ const Icons = {
 };
 
 const navItems = [
-  { to: '/',            label: 'Dashboard',         icon: 'dashboard',   exact: true },
-  { to: '/students',    label: 'Student Directory', icon: 'students' },
-  { to: '/add-student', label: 'Enroll Student',    icon: 'faculty' },
-  { to: '/departments', label: 'Departments',       icon: 'departments' },
-  { to: '/semesters',   label: 'Semesters',         icon: 'semesters' },
-  { to: '/reports',     label: 'Academic Reports',  icon: 'reports' },
+  { to: '/',            label: 'Dashboard',        icon: 'dashboard',   exact: true },
+  { to: '/students',    label: 'All Students',     icon: 'students' },
+  { to: '/add-student', label: 'Add Student',      icon: 'addStudent' },
+  { to: '/departments', label: 'Departments',      icon: 'departments' },
+  { to: '/semesters',   label: 'Semesters',        icon: 'semesters' },
+  { to: '/reports',     label: 'Reports',          icon: 'reports' },
 ];
 
 const Sidebar = ({ collapsed, onToggle, mobileOpen, onMobileClose }) => {
@@ -72,15 +72,15 @@ const Sidebar = ({ collapsed, onToggle, mobileOpen, onMobileClose }) => {
       )}
 
       <aside className={`sidebar${collapsed ? ' collapsed' : ''}${mobileOpen ? ' mobile-open' : ''}`}>
-        {/* ── Brand College Header ── */}
+        {/* ── Brand: STUDENT MANAGEMENT ── */}
         <div className="sidebar-brand">
           <div className="sidebar-logo-icon">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
-              <path d="M22 10v6M2 10l10-5 10 5-10 5z" stroke="#3b82f6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M6 12v5c3 3 9 3 12 0v-5" stroke="#f59e0b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+              <path d="M6 12v5c3 3 9 3 12 0v-5"/>
             </svg>
           </div>
-          {!collapsed && <span className="sidebar-brand-name">COLLEGE</span>}
+          {!collapsed && <span className="sidebar-brand-name">STUDENTS</span>}
           <button
             className="sidebar-toggle"
             onClick={onToggle}
@@ -90,7 +90,7 @@ const Sidebar = ({ collapsed, onToggle, mobileOpen, onMobileClose }) => {
           </button>
         </div>
 
-        {/* ── College Navigation Items ── */}
+        {/* ── Navigation Items ── */}
         <nav className="sidebar-nav">
           {navItems.map((item) => (
             <NavLink
@@ -107,12 +107,12 @@ const Sidebar = ({ collapsed, onToggle, mobileOpen, onMobileClose }) => {
           ))}
         </nav>
 
-        {/* ── Footer / Settings & Logout ── */}
+        {/* ── Footer: Settings & Logout ── */}
         <div className="sidebar-footer">
           <NavLink
             to="/settings"
             className={({ isActive }) => `sidebar-nav-item${isActive ? ' active' : ''}`}
-            title="Faculty Settings"
+            title="Settings"
           >
             <span className="nav-icon">{Icons.settings}</span>
             {!collapsed && <span className="nav-label">Settings</span>}
@@ -120,7 +120,7 @@ const Sidebar = ({ collapsed, onToggle, mobileOpen, onMobileClose }) => {
           <button
             className="sidebar-nav-item"
             style={{ background: 'transparent', border: 'none', cursor: 'pointer', textAlign: 'left', width: '100%' }}
-            onClick={() => alert('Faculty session active.')}
+            onClick={() => alert('Student Management System v1.0')}
             title="Logout"
           >
             <span className="nav-icon">{Icons.logout}</span>
