@@ -16,7 +16,7 @@ const Dashboard = ({ showNotification }) => {
       setError('');
       const [statsRes, studentsRes] = await Promise.all([
         getStats(),
-        getAllStudents({ limit: 10 }),
+        getAllStudents({ limit: 8 }),
       ]);
       setStats(statsRes.data.data);
       setStudents(studentsRes.data.data || []);
@@ -33,23 +33,22 @@ const Dashboard = ({ showNotification }) => {
 
   if (loading) {
     return (
-      <div className="dashboard" style={{ padding: '20px 0' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '20px' }}>
-          <div className="skeleton" style={{ height: '85px', borderRadius: '12px' }} />
-          <div className="skeleton" style={{ height: '85px', borderRadius: '12px' }} />
-          <div className="skeleton" style={{ height: '85px', borderRadius: '12px' }} />
-          <div className="skeleton" style={{ height: '85px', borderRadius: '12px' }} />
+      <div className="dashboard-clean">
+        <div className="clean-stats-grid">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="skeleton" style={{ height: '110px', borderRadius: '16px' }} />
+          ))}
         </div>
-        <div className="skeleton" style={{ height: '280px', borderRadius: '16px' }} />
+        <div className="skeleton" style={{ height: '360px', borderRadius: '16px', marginTop: '24px' }} />
       </div>
     );
   }
 
   if (error) {
     return (
-      <div style={{ textAlign: 'center', padding: '60px 20px' }}>
-        <h3 style={{ color: 'var(--color-accent-rose)' }}>Unable to Load Dashboard</h3>
-        <p style={{ color: 'var(--color-text-secondary)', margin: '10px 0 20px 0' }}>{error}</p>
+      <div style={{ textAlign: 'center', padding: '80px 20px' }}>
+        <h3 style={{ color: '#ef4444' }}>Unable to Load Dashboard</h3>
+        <p style={{ color: '#64748b', margin: '10px 0 20px 0' }}>{error}</p>
         <button className="btn btn-primary" onClick={fetchDashboardData}>
           Retry
         </button>
@@ -61,288 +60,184 @@ const Dashboard = ({ showNotification }) => {
   const deptCount   = stats?.byDepartment?.length ?? 0;
   const semCount    = stats?.bySemester?.length ?? 0;
   const recentCount = stats?.recentCount ?? 0;
-
-  // Monthly enrollment count (Slate Blue: New registrations, Gold: Active)
-  const months = [
-    { name: 'Jan', blue: 110, gold: 65 },
-    { name: 'Feb', blue: 95,  gold: 70 },
-    { name: 'Mar', blue: 75,  gold: 55 },
-    { name: 'Apr', blue: 105, gold: 85 },
-    { name: 'May', blue: 45,  gold: 40 },
-    { name: 'Jun', blue: 85,  gold: 60 },
-    { name: 'Jul', blue: 135, gold: 90 },
-    { name: 'Aug', blue: 70,  gold: 80 },
-    { name: 'Sep', blue: 125, gold: 75 },
-    { name: 'Oct', blue: 100, gold: 85 },
-    { name: 'Nov', blue: 80,  gold: 65 },
-    { name: 'Dec', blue: 95,  gold: 90 },
-  ];
+  const topDepts    = stats?.byDepartment?.slice(0, 5) || [];
 
   return (
-    <div className="dashboard">
-      {/* ── 1. Top 4 Metric Cards for Student Management ── */}
-      <section className="top-metrics-grid">
+    <div className="dashboard-clean">
+      {/* ── Top 4 Clean Spacious Stat Cards ── */}
+      <section className="clean-stats-grid">
         {/* Card 1: Total Students */}
-        <div className="metric-card" onClick={() => navigate('/students')} title="View All Students">
-          <div className="metric-icon-box" style={{ background: '#eff6ff' }}>
-            🎓
+        <div className="clean-stat-card" onClick={() => navigate('/students')}>
+          <div className="clean-stat-icon" style={{ background: '#eff6ff', color: '#2563eb' }}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
           </div>
-          <div className="metric-content">
-            <span className="metric-label">Total Students</span>
-            <span className="metric-value">{totalCount > 0 ? totalCount.toLocaleString() : '1,240'}</span>
+          <div className="clean-stat-info">
+            <span className="clean-stat-label">Total Students</span>
+            <span className="clean-stat-value">{totalCount.toLocaleString()}</span>
           </div>
         </div>
 
         {/* Card 2: Departments */}
-        <div className="metric-card" onClick={() => navigate('/departments')} title="Browse by Department">
-          <div className="metric-icon-box" style={{ background: '#fdf2f8' }}>
-            🏛️
+        <div className="clean-stat-card" onClick={() => navigate('/departments')}>
+          <div className="clean-stat-icon" style={{ background: '#f5f3ff', color: '#7c3aed' }}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+              <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
           </div>
-          <div className="metric-content">
-            <span className="metric-label">Departments</span>
-            <span className="metric-value">{deptCount > 0 ? deptCount : '12'}</span>
+          <div className="clean-stat-info">
+            <span className="clean-stat-label">Departments</span>
+            <span className="clean-stat-value">{deptCount}</span>
           </div>
         </div>
 
         {/* Card 3: Active Semesters */}
-        <div className="metric-card" onClick={() => navigate('/semesters')} title="View Semesters">
-          <div className="metric-icon-box" style={{ background: '#f5f3ff' }}>
-            📅
+        <div className="clean-stat-card" onClick={() => navigate('/semesters')}>
+          <div className="clean-stat-icon" style={{ background: '#ecfdf5', color: '#059669' }}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+              <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
+              <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
           </div>
-          <div className="metric-content">
-            <span className="metric-label">Semesters</span>
-            <span className="metric-value">{semCount > 0 ? semCount : '8'}</span>
+          <div className="clean-stat-info">
+            <span className="clean-stat-label">Semesters</span>
+            <span className="clean-stat-value">{semCount || 8}</span>
           </div>
         </div>
 
-        {/* Card 4: New Enrolled (This Week) */}
-        <div className="metric-card" onClick={() => navigate('/add-student')} title="Register New Student">
-          <div className="metric-icon-box" style={{ background: '#fffbeb' }}>
-            ✨
+        {/* Card 4: New This Week */}
+        <div className="clean-stat-card" onClick={() => navigate('/add-student')}>
+          <div className="clean-stat-icon" style={{ background: '#fffbeb', color: '#d97706' }}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="17" y1="11" x2="23" y2="11"/>
+            </svg>
           </div>
-          <div className="metric-content">
-            <span className="metric-label">New This Week</span>
-            <span className="metric-value">+{recentCount > 0 ? recentCount : '24'}</span>
+          <div className="clean-stat-info">
+            <span className="clean-stat-label">Added This Week</span>
+            <span className="clean-stat-value">+{recentCount}</span>
           </div>
         </div>
       </section>
 
-      {/* ── 2. Two-Column Main Layout ── */}
-      <div className="dashboard-main-layout">
-        {/* Left Column (Enrollment Chart + Student Directory & Distribution) */}
-        <div className="main-left-column">
-          {/* Monthly Student Enrollments Chart */}
-          <div className="chart-card">
-            <div className="card-top-row">
-              <h3 className="card-title">Student Enrollment Trends</h3>
-              <div className="chart-legend">
-                <span>
-                  <span className="legend-dot" style={{ background: '#3d4a5d' }} />
-                  New Admissions
-                </span>
-                <span>
-                  <span className="legend-dot" style={{ background: '#f59e0b' }} />
-                  Active Students
-                </span>
-                <select className="year-dropdown" defaultValue="2026">
-                  <option value="2026">2026</option>
-                  <option value="2025">2025</option>
-                </select>
-              </div>
+      {/* ── Main Two-Column Clean Layout ── */}
+      <div className="clean-main-grid">
+        {/* Left Column: Full Student Directory */}
+        <div className="clean-card clean-table-card">
+          <div className="clean-card-header">
+            <div>
+              <h2 className="clean-card-title">Enrolled Students</h2>
+              <p className="clean-card-sub">Recent student records from the database</p>
             </div>
-
-            <div className="bar-chart-container">
-              {months.map((m) => (
-                <div key={m.name} className="bar-month-group">
-                  <div className="bars-pair">
-                    <div className="bar-col bar-blue" style={{ height: `${m.blue}px` }} title={`New: ${m.blue}`} />
-                    <div className="bar-col bar-gold" style={{ height: `${m.gold}px` }} title={`Active: ${m.gold}`} />
-                  </div>
-                  <span className="month-label">{m.name}</span>
-                </div>
-              ))}
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <Link to="/add-student" className="btn btn-primary btn-sm">+ Add Student</Link>
+              <Link to="/students" className="btn btn-secondary btn-sm">View All</Link>
             </div>
           </div>
 
-          {/* Bottom Split: Recent Student Roster & Semester Distribution */}
-          <div className="bottom-split-row">
-            {/* Student Directory Table */}
-            <div className="performer-card">
-              <div className="card-top-row">
-                <h3 className="card-title">Student Directory ({totalCount} Registered)</h3>
-                <Link to="/students" style={{ fontSize: '0.75rem', color: '#3b82f6', fontWeight: 600 }}>View All</Link>
-              </div>
-
-              <div className="performer-tabs">
-                <span className="performer-tab active">All Students</span>
-                <span className="performer-tab" onClick={() => navigate('/add-student')}>+ Add Student</span>
-              </div>
-
-              <table className="performer-table">
-                <thead>
+          <div className="clean-table-responsive">
+            <table className="clean-table">
+              <thead>
+                <tr>
+                  <th>Student</th>
+                  <th>Student ID</th>
+                  <th>Department</th>
+                  <th>Semester</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {students.length === 0 ? (
                   <tr>
-                    <th>Student Name</th>
-                    <th>Student ID</th>
-                    <th>Department</th>
-                    <th>Semester</th>
+                    <td colSpan="5" style={{ textAlign: 'center', padding: '40px', color: '#94a3b8' }}>
+                      No students registered yet. Click <strong>+ Add Student</strong> to create your first record.
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {students.length > 0 ? (
-                    students.slice(0, 4).map((st) => (
-                      <tr key={st._id}>
-                        <td>
-                          <div className="performer-user">
-                            <div className="performer-avatar">
-                              {st.name.charAt(0)}
-                            </div>
-                            <span style={{ fontWeight: 600 }}>{st.name}</span>
+                ) : (
+                  students.map((st) => (
+                    <tr key={st._id}>
+                      <td>
+                        <div className="clean-user-cell">
+                          <div className="clean-avatar">{st.name.charAt(0).toUpperCase()}</div>
+                          <div>
+                            <div className="clean-user-name">{st.name}</div>
+                            <div className="clean-user-email">{st.email}</div>
                           </div>
-                        </td>
-                        <td style={{ color: 'var(--color-text-muted)', fontWeight: 600 }}>{st.studentId}</td>
-                        <td>{st.department}</td>
-                        <td>
-                          <span className="badge badge-primary">Sem {st.semester}</span>
-                        </td>
-                      </tr>
-                    ))
-                  ) : (
-                    <>
-                      <tr>
-                        <td>
-                          <div className="performer-user">
-                            <div className="performer-avatar">PS</div>
-                            <span style={{ fontWeight: 600 }}>Priya Sharma</span>
-                          </div>
-                        </td>
-                        <td style={{ color: 'var(--color-text-muted)' }}>CS2024001</td>
-                        <td>Computer Science</td>
-                        <td><span className="badge badge-primary">Sem 3</span></td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div className="performer-user">
-                            <div className="performer-avatar">RK</div>
-                            <span style={{ fontWeight: 600 }}>Raj Kumar</span>
-                          </div>
-                        </td>
-                        <td style={{ color: 'var(--color-text-muted)' }}>IT2024042</td>
-                        <td>Information Tech</td>
-                        <td><span className="badge badge-primary">Sem 2</span></td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div className="performer-user">
-                            <div className="performer-avatar">AD</div>
-                            <span style={{ fontWeight: 600 }}>Ananya Deshmukh</span>
-                          </div>
-                        </td>
-                        <td style={{ color: 'var(--color-text-muted)' }}>EE2024018</td>
-                        <td>Electronics</td>
-                        <td><span className="badge badge-primary">Sem 5</span></td>
-                      </tr>
-                    </>
-                  )}
-                </tbody>
-              </table>
-            </div>
-
-            {/* Student Retention & Department Distribution */}
-            <div className="attendance-card">
-              <div className="card-top-row" style={{ width: '100%' }}>
-                <h3 className="card-title">Student Retention</h3>
-                <span style={{ color: 'var(--color-text-muted)', fontSize: '1.2rem', cursor: 'pointer' }}>···</span>
-              </div>
-
-              {/* Concentric Ring Graphic */}
-              <div className="circular-chart-box">
-                <svg width="120" height="120" viewBox="0 0 120 120">
-                  {/* Outer circle: Retention Rate */}
-                  <circle cx="60" cy="60" r="50" fill="none" stroke="#e2e8f0" strokeWidth="8"/>
-                  <circle
-                    cx="60" cy="60" r="50" fill="none" stroke="#3d4a5d" strokeWidth="8"
-                    strokeDasharray="314" strokeDashoffset="34" strokeLinecap="round"
-                    transform="rotate(-90 60 60)"
-                  />
-                  {/* Inner circle: Semester Progress */}
-                  <circle cx="60" cy="60" r="36" fill="none" stroke="#fef3c7" strokeWidth="6"/>
-                  <circle
-                    cx="60" cy="60" r="36" fill="none" stroke="#f59e0b" strokeWidth="6"
-                    strokeDasharray="226" strokeDashoffset="26" strokeLinecap="round"
-                    transform="rotate(-90 60 60)"
-                  />
-                </svg>
-              </div>
-
-              <div className="attendance-stats-footer">
-                <div className="att-stat-item">
-                  <span className="att-label">Retention Rate</span>
-                  <span className="att-val" style={{ color: '#3d4a5d' }}>89%</span>
-                </div>
-                <div className="att-stat-item">
-                  <span className="att-label">Graduation Rate</span>
-                  <span className="att-val" style={{ color: '#f59e0b' }}>92%</span>
-                </div>
-              </div>
-            </div>
+                        </div>
+                      </td>
+                      <td>
+                        <span className="clean-id-badge">{st.studentId}</span>
+                      </td>
+                      <td>
+                        <span className="clean-dept-pill">{st.department}</span>
+                      </td>
+                      <td>
+                        <span className="badge badge-primary">Semester {st.semester}</span>
+                      </td>
+                      <td>
+                        <button
+                          className="btn btn-ghost btn-sm"
+                          onClick={() => navigate('/students')}
+                        >
+                          View
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
           </div>
         </div>
 
-        {/* Right Column (Academic Calendar & Quick Add Student CTA) */}
-        <div className="main-right-column">
-          {/* Academic Calendar Card */}
-          <div className="events-calendar-card">
-            <div className="card-top-row">
-              <h3 className="card-title">Academic Calendar</h3>
-              <span style={{ color: 'var(--color-text-muted)', fontSize: '1.2rem', cursor: 'pointer' }}>···</span>
+        {/* Right Column: Department Distribution & Quick Actions */}
+        <div className="clean-right-column">
+          {/* Department Breakdown */}
+          <div className="clean-card">
+            <div className="clean-card-header">
+              <h2 className="clean-card-title">Departments</h2>
+              <Link to="/departments" className="clean-link">See all</Link>
             </div>
 
-            {/* Event Capsules */}
-            <div className="event-capsule-row">
-              <div className="event-capsule">
-                <span className="event-date-badge">● Semester Start</span>
-                <span className="event-title">Enrollment &rarr;</span>
-              </div>
-              <div className="event-capsule">
-                <span className="event-date-badge" style={{ color: '#ef4444' }}>● Examinations</span>
-                <span className="event-title">Final Exam &rarr;</span>
-              </div>
-            </div>
-
-            {/* Mini Calendar View */}
-            <div className="mini-calendar-header">
-              <span>&lsaquo;</span>
-              <span>November 2026</span>
-              <span>&rsaquo;</span>
-            </div>
-
-            <div className="calendar-weekdays">
-              <span>SUN</span><span>MON</span><span>TUE</span><span>WED</span><span>THU</span><span>FRI</span><span>SAT</span>
-            </div>
-
-            <div className="calendar-days-grid">
-              <span>1</span><span>2</span><span>3</span><span>4</span>
-              <span className="cal-day active-blue">5</span><span>6</span><span>7</span>
-              <span>8</span><span>9</span><span className="cal-day active-rose">10</span><span>11</span><span>12</span><span>13</span><span>14</span>
-              <span>15</span><span>16</span><span>17</span><span>18</span>
-              <span className="cal-day active-dark">19</span><span>20</span><span>21</span>
-              <span>22</span><span>23</span><span className="cal-day active-blue">24</span><span>25</span><span>26</span>
-              <span>27</span><span>28</span><span>29</span><span>30</span>
+            <div className="clean-dept-list">
+              {topDepts.length === 0 ? (
+                <p style={{ color: '#94a3b8', fontSize: '0.85rem' }}>No department data yet.</p>
+              ) : (
+                topDepts.map((d) => {
+                  const pct = totalCount > 0 ? Math.round((d.count / totalCount) * 100) : 0;
+                  return (
+                    <div key={d._id} className="clean-dept-row">
+                      <div className="clean-dept-info">
+                        <span className="clean-dept-name">{d._id}</span>
+                        <span className="clean-dept-count">{d.count} students</span>
+                      </div>
+                      <div className="clean-bar-track">
+                        <div className="clean-bar-fill" style={{ width: `${Math.max(pct, 6)}%` }} />
+                      </div>
+                    </div>
+                  );
+                })
+              )}
             </div>
           </div>
 
-          {/* Quick Action Student Card */}
-          <div className="community-cta-card">
-            <div className="cta-title">
-              Manage student records, departments, and academic progress.
-            </div>
+          {/* Quick Action Banner */}
+          <div className="clean-card clean-cta-card">
+            <h3 className="clean-cta-title">Register a New Student</h3>
+            <p className="clean-cta-desc">
+              Add student profile details, assign departments, and track academic progress.
+            </p>
             <button
-              className="cta-btn"
+              className="btn btn-primary"
+              style={{ width: '100%', marginTop: '8px' }}
               onClick={() => navigate('/add-student')}
             >
-              + Add New Student
+              + Go to Registration Form
             </button>
-            <div className="cta-graphic" />
           </div>
         </div>
       </div>
