@@ -1,0 +1,142 @@
+/* ─── Semesters Page ───────────────────────────────────────────────── */
+
+/* Big chart */
+.sem-chart-card { margin-bottom: var(--space-6); }
+
+.sem-chart-bars {
+  display: flex;
+  gap: var(--space-4);
+  align-items: flex-end;
+  height: 160px;
+  padding: 0 var(--space-2) var(--space-2);
+}
+
+.sem-chart-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  transition: opacity var(--transition-fast);
+}
+
+.sem-chart-item:hover { opacity: 0.8; }
+
+.sem-chart-count {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  min-height: 1em;
+}
+
+.sem-chart-track {
+  flex: 1;
+  width: 100%;
+  max-width: 44px;
+  background: var(--color-bg-hover);
+  border-radius: 6px 6px 0 0;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  min-height: 8px;
+}
+
+.sem-chart-fill {
+  width: 100%;
+  border-radius: 6px 6px 0 0;
+  transition: height 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sem-chart-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+/* Cards grid */
+.sem-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-5);
+}
+
+.sem-card {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  transition: all var(--transition-base);
+}
+
+.sem-card.active:hover {
+  border-color: var(--sem-color, var(--color-primary));
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+.sem-card.inactive {
+  opacity: 0.6;
+}
+
+.sem-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sem-card-num {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.sem-card-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+.sem-card-count {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.sem-count-unit {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+
+.sem-view-btn {
+  font-size: 0.78rem;
+  align-self: flex-start;
+}
+
+.sem-empty-label {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+@media (max-width: 1100px) {
+  .sem-cards-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .sem-cards-grid { grid-template-columns: repeat(2, 1fr); }
+  .sem-chart-bars { height: 120px; }
+}
+
+@media (max-width: 480px) {
+  .sem-cards-grid { grid-template-columns: 1fr 1fr; }
+}

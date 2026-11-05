@@ -1,0 +1,121 @@
+/* ─── Students Page Styles ─────────────────────────────────────────── */
+
+.filters-card { margin-bottom: var(--space-5); }
+
+.filters-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.filter-select { width: auto; min-width: 170px; }
+
+.table-card { padding: 0; overflow: hidden; }
+
+/* Row */
+.row-num { color: var(--color-text-muted); font-size: 0.8rem; width: 40px; }
+
+.student-id-badge {
+  font-family: 'Courier New', monospace;
+  font-size: 0.78rem;
+  background: var(--color-bg-hover);
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  color: var(--color-primary-light);
+  font-weight: 600;
+  border: 1px solid var(--color-border);
+  white-space: nowrap;
+}
+
+.student-name-cell {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.mini-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--gradient-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.email-cell {
+  color: var(--color-text-secondary);
+  font-size: 0.84rem;
+  max-width: 190px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.contact-cell { color: var(--color-text-secondary); font-size: 0.85rem; }
+
+.action-buttons { display: flex; gap: var(--space-2); }
+
+/* Table row hover */
+.table-row-animate { transition: background var(--transition-fast); }
+.table-row-animate:hover { background: var(--color-bg-hover); }
+
+/* Modals */
+.edit-modal { max-width: 640px !important; }
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--color-border);
+}
+
+/* View Details */
+.view-details-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.view-detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(45, 49, 83, 0.5);
+  gap: var(--space-4);
+}
+
+.view-detail-row:last-child { border-bottom: none; }
+
+.view-detail-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+  width: 110px;
+}
+
+.view-detail-value {
+  font-size: 0.9rem;
+  color: var(--color-text-primary);
+  text-align: right;
+  word-break: break-all;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .filters-row { flex-direction: column; align-items: stretch; }
+  .search-input { min-width: unset; width: 100%; }
+  .filter-select { min-width: unset; width: 100%; }
+  .email-cell { max-width: 100px; }
+}
