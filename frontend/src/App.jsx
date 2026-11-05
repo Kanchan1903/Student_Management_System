@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Notification from './components/Notification';
 import Dashboard from './pages/Dashboard';
@@ -11,7 +11,6 @@ import Reports from './pages/Reports';
 import Settings from './pages/Settings';
 
 let notifCounter = 0;
-
 const SIDEBAR_COLLAPSED_KEY = 'edumanage_sidebar_collapsed';
 
 const App = () => {
@@ -20,8 +19,9 @@ const App = () => {
     () => localStorage.getItem(SIDEBAR_COLLAPSED_KEY) === 'true'
   );
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
 
-  // Persist sidebar state
   useEffect(() => {
     localStorage.setItem(SIDEBAR_COLLAPSED_KEY, sidebarCollapsed);
   }, [sidebarCollapsed]);
@@ -45,6 +45,12 @@ const App = () => {
     setNotifications((prev) => prev.filter((n) => n.id !== id));
   }, []);
 
+  const handleSearchSubmit = (e) => {
+    if (e.key === 'Enter' && searchQuery.trim()) {
+      navigate(`/students?search=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  };
+
   return (
     <div className="app-layout">
       <Sidebar
@@ -54,30 +60,71 @@ const App = () => {
         onMobileClose={closeMobileSidebar}
       />
 
-      <main
-        className={`main-content${sidebarCollapsed ? ' sidebar-collapsed' : ''}`}
-        style={{ transition: 'margin-left var(--transition-base)' }}
-      >
+      <main className={`main-content${sidebarCollapsed ? ' sidebar-collapsed' : ''}`}>
         {/* ── Mobile Header ── */}
         <div className="mobile-header">
           <button
-            id="mobile-menu-btn"
-            className="btn btn-ghost btn-icon"
+            className="btn btn-ghost"
+            style={{ padding: '6px 10px' }}
             onClick={openMobileSidebar}
-            aria-label="Open navigation menu"
+            aria-label="Open menu"
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-              <line x1="3" y1="6" x2="21" y2="6"/>
-              <line x1="3" y1="12" x2="21" y2="12"/>
-              <line x1="3" y1="18" x2="21" y2="18"/>
-            </svg>
+            ☰
           </button>
-          <span style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '1rem', background: 'var(--gradient-primary)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+          <span style={{ fontFamily: 'var(--font-display)', fontWeight: 800, color: 'var(--color-primary)' }}>
             EduManage
           </span>
         </div>
 
-        {/* ── Page Content ── */}
+        {/* ── Top Header Matching UI Screenshot ── */}
+        <header className="topbar">
+          <div className="topbar-search">
+            <svg
+              className="topbar-search-icon"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input
+              type="text"
+              className="topbar-search-input"
+              placeholder="Search students, departments, tasks..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={handleSearchSubmit}
+            />
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+            <div className="topbar-bell" title="Notifications">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+              </svg>
+              <span className="topbar-bell-badge" />
+            </div>
+
+            <div className="topbar-user" onClick={() => navigate('/settings')}>
+              <div className="topbar-user-avatar">
+                JD
+              </div>
+              <div className="topbar-user-info">
+                <span className="topbar-user-name">John Doe</span>
+                <span className="topbar-user-role">3rd year</span>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        {/* ── Main Router View ── */}
         <div className="page-container">
           <Routes>
             <Route path="/"            element={<Dashboard    showNotification={showNotification} />} />
@@ -90,15 +137,9 @@ const App = () => {
             <Route
               path="*"
               element={
-                <div className="empty-state" style={{ paddingTop: '20vh' }}>
-                  <div className="empty-state-icon">
-                    <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.4 }}>
-                      <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                    </svg>
-                  </div>
-                  <h3>Page Not Found</h3>
-                  <p>The page you're looking for doesn't exist.</p>
-                  <a href="/" className="btn btn-primary">Go to Dashboard</a>
+                <div style={{ textAlign: 'center', padding: '100px 20px' }}>
+                  <h2>Page Not Found</h2>
+                  <p style={{ color: 'var(--color-text-secondary)', marginTop: '8px' }}>The requested page doesn't exist.</p>
                 </div>
               }
             />
