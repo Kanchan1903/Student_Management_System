@@ -155,7 +155,7 @@ const Semesters = ({ showNotification }) => {
                   </div>
                   <div className="sem-card-label">{SEM_LABELS[sem]} Semester</div>
                   <div className="sem-card-count" style={{ color: active ? 'var(--color-text-primary)' : 'var(--color-text-muted)' }}>
-                    {active ? count : '0'}
+                    <span>{active ? count : '0'}</span>
                     <span className="sem-count-unit"> student{count !== 1 ? 's' : ''}</span>
                   </div>
                   {active ? (

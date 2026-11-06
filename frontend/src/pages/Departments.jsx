@@ -100,30 +100,36 @@ const Departments = ({ showNotification }) => {
         </div>
       ) : (
         <>
-          {/* ── Summary Bar ── */}
-          <div className="card dept-summary-bar animate-in">
-            <div className="dept-bar-visual">
-              {departments.map((dept, i) => {
-                const pct = total > 0 ? (dept.count / total) * 100 : 0;
-                return (
-                  <div
-                    key={dept._id}
-                    className="dept-bar-segment"
-                    style={{ width: `${pct}%`, background: DEPT_COLORS[i % DEPT_COLORS.length] }}
-                    title={`${dept._id}: ${dept.count} students (${pct.toFixed(1)}%)`}
-                  />
-                );
-              })}
+          {/* ── Summary Distribution Bar (Only shown when there are enrolled students) ── */}
+          {total > 0 && (
+            <div className="card dept-summary-bar animate-in">
+              <div className="dept-bar-visual">
+                {departments
+                  .filter((d) => d.count > 0)
+                  .map((dept) => {
+                    const originalIdx = ALL_DEPARTMENTS.indexOf(dept._id);
+                    const color = DEPT_COLORS[originalIdx >= 0 ? originalIdx : 0];
+                    const pct = (dept.count / total) * 100;
+                    return (
+                      <div
+                        key={dept._id}
+                        className="dept-bar-segment"
+                        style={{ width: `${pct}%`, background: color }}
+                        title={`${dept._id}: ${dept.count} students (${pct.toFixed(1)}%)`}
+                      />
+                    );
+                  })}
+              </div>
+              <div className="dept-legend">
+                {departments.map((dept, i) => (
+                  <div key={dept._id} className="dept-legend-item">
+                    <span className="dept-legend-dot" style={{ background: DEPT_COLORS[i] }} />
+                    <span className="dept-legend-name">{dept._id}</span>
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="dept-legend">
-              {departments.map((dept, i) => (
-                <div key={dept._id} className="dept-legend-item">
-                  <span className="dept-legend-dot" style={{ background: DEPT_COLORS[i % DEPT_COLORS.length] }} />
-                  <span className="dept-legend-name">{dept._id}</span>
-                </div>
-              ))}
-            </div>
-          </div>
+          )}
 
           {/* ── Department Cards ── */}
           <div className="dept-cards-grid">
