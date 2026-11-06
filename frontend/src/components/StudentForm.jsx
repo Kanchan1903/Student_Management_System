@@ -27,6 +27,20 @@ const INITIAL_FORM = {
   contact: '',
 };
 
+// Helper component defined outside to avoid unmounting/remounting on every render
+const Field = ({ name, label, required, touched, errors, children }) => (
+  <div className="form-group">
+    <label className="form-label" htmlFor={`field-${name}`}>
+      {label}
+      {required && <span className="required">*</span>}
+    </label>
+    {children}
+    {touched[name] && errors[name] && (
+      <span className="form-error" role="alert">⚠️ {errors[name]}</span>
+    )}
+  </div>
+);
+
 /**
  * Reusable Student Form for both Add and Edit operations.
  * Props:
@@ -134,23 +148,10 @@ const StudentForm = ({ initialData = null, onSubmit, onCancel, isLoading = false
     });
   };
 
-  const Field = ({ name, label, required, children }) => (
-    <div className="form-group">
-      <label className="form-label" htmlFor={`field-${name}`}>
-        {label}
-        {required && <span className="required">*</span>}
-      </label>
-      {children}
-      {touched[name] && errors[name] && (
-        <span className="form-error" role="alert">⚠️ {errors[name]}</span>
-      )}
-    </div>
-  );
-
   return (
     <form onSubmit={handleSubmit} noValidate>
       <div className="form-grid">
-        <Field name="studentId" label="Student ID" required>
+        <Field name="studentId" label="Student ID" required touched={touched} errors={errors}>
           <input
             id="field-studentId"
             name="studentId"
@@ -165,7 +166,7 @@ const StudentForm = ({ initialData = null, onSubmit, onCancel, isLoading = false
           />
         </Field>
 
-        <Field name="name" label="Full Name" required>
+        <Field name="name" label="Full Name" required touched={touched} errors={errors}>
           <input
             id="field-name"
             name="name"
@@ -180,7 +181,7 @@ const StudentForm = ({ initialData = null, onSubmit, onCancel, isLoading = false
           />
         </Field>
 
-        <Field name="email" label="Email Address" required>
+        <Field name="email" label="Email Address" required touched={touched} errors={errors}>
           <input
             id="field-email"
             name="email"
@@ -195,7 +196,7 @@ const StudentForm = ({ initialData = null, onSubmit, onCancel, isLoading = false
           />
         </Field>
 
-        <Field name="department" label="Department" required>
+        <Field name="department" label="Department" required touched={touched} errors={errors}>
           <select
             id="field-department"
             name="department"
@@ -212,7 +213,7 @@ const StudentForm = ({ initialData = null, onSubmit, onCancel, isLoading = false
           </select>
         </Field>
 
-        <Field name="semester" label="Semester" required>
+        <Field name="semester" label="Semester" required touched={touched} errors={errors}>
           <select
             id="field-semester"
             name="semester"
@@ -229,7 +230,7 @@ const StudentForm = ({ initialData = null, onSubmit, onCancel, isLoading = false
           </select>
         </Field>
 
-        <Field name="contact" label="Contact Number">
+        <Field name="contact" label="Contact Number" touched={touched} errors={errors}>
           <input
             id="field-contact"
             name="contact"
