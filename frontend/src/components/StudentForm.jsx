@@ -15,7 +15,6 @@ const INITIAL_FORM = {
   email: '',
   department: '',
   semester: '',
-  attendance: '85',
   contact: '',
 };
 
@@ -56,7 +55,6 @@ const StudentForm = ({ initialData = null, onSubmit, onCancel, isLoading = false
         email: initialData.email || '',
         department: initialData.department || '',
         semester: String(initialData.semester) || '',
-        attendance: initialData.attendance !== undefined ? String(initialData.attendance) : '85',
         contact: initialData.contact || '',
       });
     } else {
@@ -94,10 +92,6 @@ const StudentForm = ({ initialData = null, onSubmit, onCancel, isLoading = false
 
     if (!data.semester) {
       errs.semester = 'Semester is required.';
-    }
-
-    if (data.attendance !== '' && (isNaN(data.attendance) || Number(data.attendance) < 0 || Number(data.attendance) > 100)) {
-      errs.attendance = 'Attendance must be a percentage between 0 and 100.';
     }
 
     if (data.contact && !/^[0-9+\-\s()]{7,15}$/.test(data.contact)) {
@@ -142,7 +136,6 @@ const StudentForm = ({ initialData = null, onSubmit, onCancel, isLoading = false
       ...form,
       studentId: form.studentId.toUpperCase().trim(),
       semester: parseInt(form.semester, 10),
-      attendance: form.attendance !== '' ? Number(form.attendance) : 85,
     });
   };
 
@@ -226,22 +219,6 @@ const StudentForm = ({ initialData = null, onSubmit, onCancel, isLoading = false
               <option key={s} value={s}>Semester {s}</option>
             ))}
           </select>
-        </Field>
-
-        <Field name="attendance" label="Attendance (%)" touched={touched} errors={errors}>
-          <input
-            id="field-attendance"
-            name="attendance"
-            type="number"
-            min="0"
-            max="100"
-            className={`form-control ${touched.attendance && errors.attendance ? 'error' : ''}`}
-            value={form.attendance}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            placeholder="e.g. 85"
-            disabled={isLoading}
-          />
         </Field>
 
         <Field name="contact" label="Contact Number" touched={touched} errors={errors}>

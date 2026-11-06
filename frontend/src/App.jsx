@@ -5,6 +5,7 @@ import Notification from './components/Notification';
 import Dashboard from './pages/Dashboard';
 import Students from './pages/Students';
 import AddStudent from './pages/AddStudent';
+import Attendance from './pages/Attendance';
 import Departments from './pages/Departments';
 import Semesters from './pages/Semesters';
 import Reports from './pages/Reports';
@@ -128,6 +129,7 @@ const App = () => {
             <Route path="/"            element={<Dashboard    showNotification={showNotification} />} />
             <Route path="/students"    element={<Students     showNotification={showNotification} />} />
             <Route path="/add-student" element={<AddStudent   showNotification={showNotification} />} />
+            <Route path="/attendance"  element={<Attendance   showNotification={showNotification} />} />
             <Route path="/departments" element={<Departments  showNotification={showNotification} />} />
             <Route path="/semesters"   element={<Semesters    showNotification={showNotification} />} />
             <Route path="/reports"     element={<Reports      showNotification={showNotification} />} />

@@ -58,4 +58,14 @@ export const updateStudent = (id, data) => api.put(`/students/${id}`, data);
 // Delete a student by MongoDB _id
 export const deleteStudent = (id) => api.delete(`/students/${id}`);
 
+// ─── Attendance Endpoints ──────────────────────────────────────────
+export const getAttendanceSubjects = (params = {}) =>
+  api.get('/attendance/subjects', { params });
+
+export const getAttendanceSheet = (params = {}) =>
+  api.get('/attendance/sheet', { params });
+
+export const submitAttendance = (data) =>
+  api.post('/attendance/submit', data);
+
 export default api;

@@ -40,6 +40,12 @@ const Icons = {
       <line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/>
     </svg>
   ),
+  attendance: (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M9 11l3 3L22 4"/>
+      <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+    </svg>
+  ),
   settings: (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <circle cx="12" cy="12" r="3"/>
@@ -59,6 +65,7 @@ const navItems = [
   { to: '/',            label: 'Dashboard',        icon: 'dashboard',   exact: true },
   { to: '/students',    label: 'All Students',     icon: 'students' },
   { to: '/add-student', label: 'Add Student',      icon: 'addStudent' },
+  { to: '/attendance',  label: 'Attendance',       icon: 'attendance' },
   { to: '/departments', label: 'Departments',      icon: 'departments' },
   { to: '/semesters',   label: 'Semesters',        icon: 'semesters' },
   { to: '/reports',     label: 'Reports',          icon: 'reports' },

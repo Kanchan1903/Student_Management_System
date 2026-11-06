@@ -1,0 +1,166 @@
+/* ─── Faculty Attendance Page Styles ───────────────────────── */
+
+.attendance-control-card {
+  margin-bottom: 20px;
+  padding: 22px 24px;
+}
+
+.attendance-filter-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+.filter-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.filter-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #64748b;
+}
+
+/* ── Stats Pill Bar ── */
+.attendance-stats-bar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.stat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 500;
+  border: 1px solid var(--color-border);
+  background: #ffffff;
+}
+
+.stat-pill strong {
+  font-weight: 800;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot-present { background: #10b981; }
+.dot-absent  { background: #ef4444; }
+.dot-late    { background: #f59e0b; }
+
+.present-pill { border-color: #bbf7d0; background: #f0fdf4; color: #166534; }
+.absent-pill  { border-color: #fecaca; background: #fef2f2; color: #991b1b; }
+.late-pill    { border-color: #fde68a; background: #fffbeb; color: #92400e; }
+.total-pill   { margin-left: auto; background: #f8fafc; color: #334155; }
+
+.quick-mark-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 12px;
+}
+
+/* ── Table Card ── */
+.attendance-table-card {
+  padding: 0;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+}
+
+.attendance-table th {
+  background: #f8fafc;
+  padding: 14px 18px;
+}
+
+.attendance-row td {
+  padding: 14px 18px;
+}
+
+/* Status Button Toggles */
+.status-toggle-group {
+  display: inline-flex;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.status-btn {
+  padding: 6px 14px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 120ms ease;
+  border-right: 1px solid #e2e8f0;
+}
+
+.status-btn:last-child {
+  border-right: none;
+}
+
+.status-btn:hover {
+  background: #f8fafc;
+}
+
+/* Active Status States */
+.status-btn.btn-present.active {
+  background: #10b981;
+  color: #ffffff;
+}
+
+.status-btn.btn-absent.active {
+  background: #ef4444;
+  color: #ffffff;
+}
+
+.status-btn.btn-late.active {
+  background: #f59e0b;
+  color: #ffffff;
+}
+
+/* Footer Action Bar */
+.attendance-footer-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background: #f8fafc;
+  border-top: 1px solid var(--color-border);
+}
+
+@media (max-width: 900px) {
+  .attendance-filter-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .total-pill {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .attendance-filter-grid {
+    grid-template-columns: 1fr;
+  }
+  .attendance-footer-bar {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+  }
+}
