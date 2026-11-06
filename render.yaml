@@ -1,0 +1,20 @@
+services:
+  # ── Backend Web Service + MCP Server on Render ──────────────────────────────
+  - type: web
+    name: student-management-backend
+    env: node
+    rootDir: backend
+    plan: free
+    region: oregon
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: MONGODB_URI
+        sync: false
+      - key: FRONTEND_URL
+        value: https://frontend-426d.vercel.app
