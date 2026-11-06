@@ -50,18 +50,9 @@ async function apiRequest(method, path, body = null) {
 // ─── Department enum (mirrors Mongoose schema) ────────────────────────────────
 const DEPARTMENTS = [
   'Computer Science',
-  'Information Technology',
-  'Electronics',
+  'Electrical Engineering',
   'Mechanical Engineering',
   'Civil Engineering',
-  'Electrical Engineering',
-  'Chemical Engineering',
-  'Biotechnology',
-  'Mathematics',
-  'Physics',
-  'Commerce',
-  'Arts',
-  'Other',
 ];
 
 // ─── MCP Server ───────────────────────────────────────────────────────────────
@@ -150,10 +141,12 @@ server.tool(
     email: z.string().email().describe('Email address of the student'),
     department: z.enum(DEPARTMENTS).describe('Department the student belongs to'),
     semester: z.number().int().min(1).max(8).describe('Current semester (1–8)'),
+    attendance: z.number().min(0).max(100).optional().describe('Attendance percentage (0–100, default 85)'),
     contact: z.string().optional().describe('Contact number (optional, 7–15 digits)'),
   },
-  async ({ studentId, name, email, department, semester, contact }) => {
+  async ({ studentId, name, email, department, semester, attendance, contact }) => {
     const body = { studentId, name, email, department, semester };
+    if (attendance !== undefined) body.attendance = attendance;
     if (contact) body.contact = contact;
 
     const result = await apiRequest('POST', '/students', body);
@@ -171,7 +164,7 @@ server.tool(
 // ── Tool: update_student ──────────────────────────────────────────────────────
 server.tool(
   'update_student',
-  'Update an existing student record by MongoDB _id. All fields except contact are required.',
+  'Update an existing student record by MongoDB _id. All fields except contact and attendance are required.',
   {
     id: z.string().describe('MongoDB ObjectId of the student to update'),
     studentId: z.string().describe('Student ID (can be the same or a new unique one)'),
@@ -179,10 +172,12 @@ server.tool(
     email: z.string().email().describe('Email address'),
     department: z.enum(DEPARTMENTS).describe('Department'),
     semester: z.number().int().min(1).max(8).describe('Semester (1–8)'),
+    attendance: z.number().min(0).max(100).optional().describe('Attendance percentage (0–100)'),
     contact: z.string().optional().describe('Contact number (optional)'),
   },
-  async ({ id, studentId, name, email, department, semester, contact }) => {
+  async ({ id, studentId, name, email, department, semester, attendance, contact }) => {
     const body = { studentId, name, email, department, semester, contact: contact || '' };
+    if (attendance !== undefined) body.attendance = attendance;
     const result = await apiRequest('PUT', `/students/${id}`, body);
     return {
       content: [

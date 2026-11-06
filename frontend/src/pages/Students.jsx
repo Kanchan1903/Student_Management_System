@@ -7,9 +7,10 @@ import { SkeletonRows } from '../components/LoadingSpinner';
 import './Students.css';
 
 const DEPARTMENTS = [
-  'Computer Science','Information Technology','Electronics','Mechanical Engineering',
-  'Civil Engineering','Electrical Engineering','Chemical Engineering','Biotechnology',
-  'Mathematics','Physics','Commerce','Arts','Other',
+  'Computer Science',
+  'Electrical Engineering',
+  'Mechanical Engineering',
+  'Civil Engineering',
 ];
 
 const PAGE_SIZES = [10, 25, 50, 100];
@@ -85,7 +86,7 @@ const Students = ({ showNotification }) => {
   const sorted = [...students].sort((a, b) => {
     let av = a[sortField] ?? '';
     let bv = b[sortField] ?? '';
-    if (sortField === 'semester') { av = Number(av); bv = Number(bv); }
+    if (sortField === 'semester' || sortField === 'attendance') { av = Number(av); bv = Number(bv); }
     else { av = String(av).toLowerCase(); bv = String(bv).toLowerCase(); }
     if (av < bv) return sortDir === 'asc' ? -1 : 1;
     if (av > bv) return sortDir === 'asc' ?  1 : -1;
@@ -233,13 +234,16 @@ const Students = ({ showNotification }) => {
                   <th className="sortable-th" onClick={() => handleSort('semester')}>
                     Semester <SortIcon field="semester" sortField={sortField} sortDir={sortDir} />
                   </th>
+                  <th className="sortable-th" onClick={() => handleSort('attendance')}>
+                    Attendance <SortIcon field="attendance" sortField={sortField} sortDir={sortDir} />
+                  </th>
                   <th>Contact</th>
                   <th style={{ width: 110 }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {loading ? (
-                  <SkeletonRows cols={8} rows={pageSize > 10 ? 8 : pageSize} />
+                  <SkeletonRows cols={9} rows={pageSize > 10 ? 8 : pageSize} />
                 ) : (
                   paginated.map((student, idx) => (
                     <tr key={student._id} className="table-row-animate">
@@ -254,6 +258,11 @@ const Students = ({ showNotification }) => {
                       <td className="email-cell">{student.email}</td>
                       <td><span className="badge badge-info">{student.department}</span></td>
                       <td><span className="badge badge-success">Sem {student.semester}</span></td>
+                      <td>
+                        <span className={`badge ${student.attendance >= 75 ? 'badge-success' : 'badge-danger'}`} style={{ fontWeight: 600 }}>
+                          {student.attendance !== undefined ? `${student.attendance}%` : '85%'}
+                        </span>
+                      </td>
                       <td className="contact-cell">{student.contact || '—'}</td>
                       <td>
                         <div className="action-buttons">
@@ -376,6 +385,7 @@ const Students = ({ showNotification }) => {
                 ['Email',      viewStudent.email],
                 ['Department', viewStudent.department],
                 ['Semester',   `Semester ${viewStudent.semester}`],
+                ['Attendance', `${viewStudent.attendance !== undefined ? viewStudent.attendance : 85}%`],
                 ['Contact',    viewStudent.contact || '—'],
                 ['Registered', new Date(viewStudent.createdAt).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })],
               ].map(([label, val]) => (

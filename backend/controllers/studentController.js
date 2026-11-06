@@ -100,7 +100,7 @@ const getStudentById = async (req, res) => {
 // @access  Public
 const createStudent = async (req, res) => {
   try {
-    const { studentId, name, email, department, semester, contact } = req.body;
+    const { studentId, name, email, department, semester, attendance, contact } = req.body;
 
     // Basic required field check
     if (!studentId || !name || !email || !department || !semester) {
@@ -116,6 +116,7 @@ const createStudent = async (req, res) => {
       email,
       department,
       semester,
+      attendance: attendance !== undefined && attendance !== '' ? Number(attendance) : 85,
       contact: contact || '',
     });
 
@@ -163,7 +164,7 @@ const updateStudent = async (req, res) => {
       });
     }
 
-    const { studentId, name, email, department, semester, contact } = req.body;
+    const { studentId, name, email, department, semester, attendance, contact } = req.body;
 
     if (!studentId || !name || !email || !department || !semester) {
       return res.status(400).json({
@@ -172,9 +173,22 @@ const updateStudent = async (req, res) => {
       });
     }
 
+    const updateData = {
+      studentId,
+      name,
+      email,
+      department,
+      semester,
+      contact: contact || '',
+    };
+
+    if (attendance !== undefined && attendance !== '') {
+      updateData.attendance = Number(attendance);
+    }
+
     const student = await Student.findByIdAndUpdate(
       id,
-      { studentId, name, email, department, semester, contact: contact || '' },
+      updateData,
       { new: true, runValidators: true }
     );
 

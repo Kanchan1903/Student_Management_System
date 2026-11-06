@@ -147,13 +147,14 @@ const Dashboard = ({ showNotification }) => {
                   <th>Student ID</th>
                   <th>Department</th>
                   <th>Semester</th>
+                  <th>Attendance</th>
                   <th>Action</th>
                 </tr>
               </thead>
               <tbody>
                 {students.length === 0 ? (
                   <tr>
-                    <td colSpan="5" style={{ textAlign: 'center', padding: '40px', color: '#94a3b8' }}>
+                    <td colSpan="6" style={{ textAlign: 'center', padding: '40px', color: '#94a3b8' }}>
                       No students registered yet. Click <strong>+ Add Student</strong> to create your first record.
                     </td>
                   </tr>
@@ -177,6 +178,11 @@ const Dashboard = ({ showNotification }) => {
                       </td>
                       <td>
                         <span className="badge badge-primary">Semester {st.semester}</span>
+                      </td>
+                      <td>
+                        <span className={`badge ${st.attendance >= 75 ? 'badge-success' : 'badge-danger'}`} style={{ fontWeight: 600 }}>
+                          {st.attendance !== undefined ? `${st.attendance}%` : '85%'}
+                        </span>
                       </td>
                       <td>
                         <button

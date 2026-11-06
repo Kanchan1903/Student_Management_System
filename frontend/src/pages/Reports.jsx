@@ -4,9 +4,10 @@ import { SkeletonStatCards, SkeletonCard } from '../components/LoadingSpinner';
 import './Reports.css';
 
 const DEPARTMENTS = [
-  'Computer Science','Information Technology','Electronics','Mechanical Engineering',
-  'Civil Engineering','Electrical Engineering','Chemical Engineering','Biotechnology',
-  'Mathematics','Physics','Commerce','Arts','Other',
+  'Computer Science',
+  'Electrical Engineering',
+  'Mechanical Engineering',
+  'Civil Engineering',
 ];
 
 const DEPT_COLORS = [
@@ -23,9 +24,10 @@ const escapeCSV = (val) => {
 };
 
 const downloadCSV = (students, label = 'students') => {
-  const headers = ['Student ID', 'Full Name', 'Email', 'Department', 'Semester', 'Contact', 'Registered On'];
+  const headers = ['Student ID', 'Full Name', 'Email', 'Department', 'Semester', 'Attendance (%)', 'Contact', 'Registered On'];
   const rows = students.map(s => [
     s.studentId, s.name, s.email, s.department, s.semester,
+    s.attendance !== undefined ? s.attendance : 85,
     s.contact || '',
     new Date(s.createdAt).toLocaleDateString('en-IN', { year: 'numeric', month: '2-digit', day: '2-digit' }),
   ].map(escapeCSV).join(','));

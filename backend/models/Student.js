@@ -31,18 +31,9 @@ const studentSchema = new mongoose.Schema(
       enum: {
         values: [
           'Computer Science',
-          'Information Technology',
-          'Electronics',
+          'Electrical Engineering',
           'Mechanical Engineering',
           'Civil Engineering',
-          'Electrical Engineering',
-          'Chemical Engineering',
-          'Biotechnology',
-          'Mathematics',
-          'Physics',
-          'Commerce',
-          'Arts',
-          'Other',
         ],
         message: '{VALUE} is not a valid department',
       },
@@ -52,6 +43,12 @@ const studentSchema = new mongoose.Schema(
       required: [true, 'Semester is required'],
       min: [1, 'Semester must be between 1 and 8'],
       max: [8, 'Semester must be between 1 and 8'],
+    },
+    attendance: {
+      type: Number,
+      min: [0, 'Attendance cannot be less than 0'],
+      max: [100, 'Attendance cannot exceed 100'],
+      default: 85,
     },
     contact: {
       type: String,
