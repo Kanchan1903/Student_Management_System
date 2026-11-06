@@ -121,8 +121,8 @@ const Semesters = ({ showNotification }) => {
                       <div
                         className="sem-chart-fill"
                         style={{
-                          height: `${Math.max(pct, count > 0 ? 6 : 0)}%`,
-                          background: count > 0 ? color : 'var(--color-bg-hover)',
+                          height: `${Math.max(pct, count > 0 ? 12 : 4)}%`,
+                          background: count > 0 ? color : '#e2e8f0',
                         }}
                       />
                     </div>
@@ -148,7 +148,7 @@ const Semesters = ({ showNotification }) => {
                   style={{ animationDelay: `${(sem - 1) * 0.04}s`, '--sem-color': color }}
                 >
                   <div className="sem-card-header">
-                    <div className="sem-card-num" style={{ background: active ? `${color}20` : 'var(--color-bg-hover)', color: active ? color : 'var(--color-text-muted)' }}>
+                    <div className="sem-card-num" style={{ background: active ? `${color}20` : '#f1f5f9', color: active ? color : '#94a3b8' }}>
                       S{sem}
                     </div>
                     {active && <span className="badge" style={{ background: `${color}20`, color }}>{pct}%</span>}

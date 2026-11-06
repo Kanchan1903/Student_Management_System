@@ -4,10 +4,18 @@ import { getStats } from '../services/api';
 import { SkeletonCard } from '../components/LoadingSpinner';
 import './Departments.css';
 
+const ALL_DEPARTMENTS = [
+  'Computer Science',
+  'Electrical Engineering',
+  'Mechanical Engineering',
+  'Civil Engineering',
+];
+
 const DEPT_COLORS = [
-  '#6366f1','#3b82f6','#10b981','#f59e0b',
-  '#ef4444','#8b5cf6','#06b6d4','#84cc16',
-  '#f97316','#ec4899','#14b8a6','#a855f7','#64748b',
+  '#2563eb', // Blue for CS
+  '#d97706', // Amber for Electrical
+  '#059669', // Emerald for Mechanical
+  '#7c3aed', // Purple for Civil
 ];
 
 const Departments = ({ showNotification }) => {
@@ -52,8 +60,16 @@ const Departments = ({ showNotification }) => {
     </div>
   );
 
-  const departments = data?.byDepartment || [];
-  const total       = data?.total || 0;
+  const rawDepartments = data?.byDepartment || [];
+  const total          = data?.total || 0;
+
+  // Ensure all 4 departments are represented in display cards
+  const departments = ALL_DEPARTMENTS.map((deptName) => {
+    const found = rawDepartments.find((d) => d._id === deptName);
+    return { _id: deptName, count: found?.count || 0 };
+  });
+
+  const activeCount = departments.filter((d) => d.count > 0).length;
   const maxCount    = Math.max(...departments.map(d => d.count), 1);
 
   return (
@@ -62,7 +78,7 @@ const Departments = ({ showNotification }) => {
         <div>
           <h1 className="page-title">Departments</h1>
           <p className="page-subtitle">
-            {departments.length} department{departments.length !== 1 ? 's' : ''} · {total} total students
+            {activeCount} of 4 departments active · {total} total students
           </p>
         </div>
         <Link to="/add-student" className="btn btn-primary">
@@ -71,7 +87,7 @@ const Departments = ({ showNotification }) => {
         </Link>
       </div>
 
-      {departments.length === 0 ? (
+      {total === 0 ? (
         <div className="card empty-state" style={{ padding: '48px 24px' }}>
           <div className="empty-state-icon">
             <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" style={{ opacity: 0.35 }}>
@@ -130,10 +146,10 @@ const Departments = ({ showNotification }) => {
                   <div className="dept-card-name">{dept._id}</div>
                   <div className="dept-card-count">
                     <span className="dept-big-num">{dept.count}</span>
-                    <span className="dept-pct-label">{pct}% of total</span>
+                    <span className="dept-pct-label">{dept.count > 0 ? `${pct}% of total` : 'No students'}</span>
                   </div>
                   <div className="dept-card-bar-track">
-                    <div className="dept-card-bar-fill" style={{ width: `${barPct}%`, background: color }} />
+                    <div className="dept-card-bar-fill" style={{ width: `${dept.count > 0 ? Math.max(barPct, 6) : 0}%`, background: color }} />
                   </div>
                   <button
                     className="btn btn-ghost btn-sm dept-view-btn"

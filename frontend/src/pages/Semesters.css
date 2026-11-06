@@ -1,14 +1,21 @@
 /* ─── Semesters Page ───────────────────────────────────────────────── */
 
 /* Big chart */
-.sem-chart-card { margin-bottom: var(--space-6); }
+.sem-chart-card {
+  margin-bottom: var(--space-6);
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+}
 
 .sem-chart-bars {
   display: flex;
   gap: var(--space-4);
   align-items: flex-end;
-  height: 160px;
-  padding: 0 var(--space-2) var(--space-2);
+  height: 180px;
+  padding: 24px var(--space-2) var(--space-2);
+  border-bottom: 2px solid #f1f5f9;
 }
 
 .sem-chart-item {
@@ -16,39 +23,40 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
+  height: 100%;
+  justify-content: flex-end;
   transition: opacity var(--transition-fast);
 }
 
-.sem-chart-item:hover { opacity: 0.8; }
+.sem-chart-item:hover { opacity: 0.85; }
 
 .sem-chart-count {
-  font-size: 0.72rem;
+  font-size: 0.82rem;
   font-weight: 700;
-  color: var(--color-text-secondary);
-  min-height: 1em;
+  color: var(--color-text-primary);
+  min-height: 1.2em;
 }
 
 .sem-chart-track {
-  flex: 1;
+  height: 120px;
   width: 100%;
-  max-width: 44px;
-  background: var(--color-bg-hover);
-  border-radius: 6px 6px 0 0;
+  max-width: 48px;
+  background: #f1f5f9;
+  border-radius: 8px 8px 0 0;
   display: flex;
   align-items: flex-end;
   overflow: hidden;
-  min-height: 8px;
 }
 
 .sem-chart-fill {
   width: 100%;
-  border-radius: 6px 6px 0 0;
+  border-radius: 8px 8px 0 0;
   transition: height 0.9s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .sem-chart-label {
-  font-size: 0.78rem;
+  font-size: 0.82rem;
   font-weight: 700;
 }
 
@@ -60,24 +68,31 @@
 }
 
 .sem-card {
-  background: var(--color-bg-card);
+  background: #ffffff;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
-  padding: var(--space-5);
+  padding: 22px;
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
   transition: all var(--transition-base);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+}
+
+.sem-card.active {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
 }
 
 .sem-card.active:hover {
   border-color: var(--sem-color, var(--color-primary));
   transform: translateY(-3px);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }
 
 .sem-card.inactive {
-  opacity: 0.6;
+  opacity: 0.75;
+  background: #fbfcfe;
 }
 
 .sem-card-header {
