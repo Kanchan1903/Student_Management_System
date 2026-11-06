@@ -1,13 +1,13 @@
 services:
-  # ── 1. Backend REST API Web Service ──────────────────────────────────────────
+  # ── 1. Backend REST API - Primary Docker Container ───────────────────────────
   - type: web
-    name: student-management-backend
-    env: node
+    name: student-management-backend-container-1
+    env: docker
     rootDir: backend
+    dockerfilePath: Dockerfile
+    dockerContext: .
     plan: free
     region: oregon
-    buildCommand: npm install
-    startCommand: npm start
     healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV
@@ -19,15 +19,35 @@ services:
       - key: FRONTEND_URL
         value: https://frontend-426d.vercel.app
 
-  # ── 2. Remote MCP HTTP Server (Streamable HTTP Transport) ─────────────────────
+  # ── 2. Backend REST API - Container Copy / Replica 2 ─────────────────────────
   - type: web
-    name: student-management-mcp-http
-    env: node
+    name: student-management-backend-container-2
+    env: docker
     rootDir: backend
+    dockerfilePath: Dockerfile
+    dockerContext: .
     plan: free
     region: oregon
-    buildCommand: npm install
-    startCommand: npm run mcp:http
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: MONGODB_URI
+        sync: false
+      - key: FRONTEND_URL
+        value: https://frontend-426d.vercel.app
+
+  # ── 3. Remote MCP Server - Docker Container ──────────────────────────────────
+  - type: web
+    name: student-management-mcp-container
+    env: docker
+    rootDir: backend
+    dockerfilePath: Dockerfile.mcp
+    dockerContext: .
+    plan: free
+    region: oregon
     healthCheckPath: /health
     envVars:
       - key: NODE_ENV
