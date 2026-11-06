@@ -1,0 +1,33 @@
+# Production Dockerfile for MCP HTTP Server
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci --omit=dev
+
+# ── Runner Stage ──────────────────────────────────────────
+FROM node:20-alpine AS runner
+
+WORKDIR /app
+
+ENV NODE_ENV=production
+ENV PORT=5001
+ENV HOST=0.0.0.0
+ENV BACKEND_URL=https://student-management-system-ytsf.onrender.com
+
+# Non-root user for security
+USER node
+
+COPY --chown=node:node --from=builder /app/node_modules ./node_modules
+COPY --chown=node:node package*.json ./
+COPY --chown=node:node mcp-tools.js ./
+COPY --chown=node:node mcp-http.js ./
+COPY --chown=node:node mcp-server.js ./
+
+EXPOSE 5001
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
+  CMD wget --no-verbose --tries=1 --spider http://localhost:5001/health || exit 1
+
+CMD ["node", "mcp-http.js"]

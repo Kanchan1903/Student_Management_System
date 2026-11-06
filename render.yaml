@@ -1,5 +1,5 @@
 services:
-  # ── Backend Web Service + MCP Server on Render ──────────────────────────────
+  # ── 1. Backend REST API Web Service ──────────────────────────────────────────
   - type: web
     name: student-management-backend
     env: node
@@ -18,3 +18,21 @@ services:
         sync: false
       - key: FRONTEND_URL
         value: https://frontend-426d.vercel.app
+
+  # ── 2. Remote MCP HTTP Server (Streamable HTTP Transport) ─────────────────────
+  - type: web
+    name: student-management-mcp-http
+    env: node
+    rootDir: backend
+    plan: free
+    region: oregon
+    buildCommand: npm install
+    startCommand: npm run mcp:http
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5001
+      - key: BACKEND_URL
+        value: https://student-management-system-ytsf.onrender.com
