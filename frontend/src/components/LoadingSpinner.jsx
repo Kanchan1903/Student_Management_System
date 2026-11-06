@@ -13,10 +13,10 @@ const LoadingSpinner = ({ size = 'md', text = 'Loading...' }) => {
 
 // Skeleton stat card row (4 cards)
 export const SkeletonStatCards = () => (
-  <div className="stats-grid">
+  <div className="reports-stats-grid">
     {[1, 2, 3, 4].map((i) => (
-      <div key={i} className="stat-card skeleton-card" style={{ gap: 16, display: 'flex', alignItems: 'center' }}>
-        <div className="skeleton" style={{ width: 54, height: 54, borderRadius: 10, flexShrink: 0 }} />
+      <div key={i} className="report-stat-card skeleton-card" style={{ gap: 16, display: 'flex', alignItems: 'center' }}>
+        <div className="skeleton" style={{ width: 50, height: 50, borderRadius: 14, flexShrink: 0 }} />
         <div style={{ flex: 1 }}>
           <div className="skeleton skeleton-text" style={{ width: '55%', height: 28, marginBottom: 8 }} />
           <div className="skeleton skeleton-text" style={{ width: '80%', height: 12 }} />

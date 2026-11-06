@@ -124,127 +124,55 @@ const Dashboard = ({ showNotification }) => {
         </div>
       </section>
 
-      {/* ── Main Two-Column Clean Layout ── */}
-      <div className="clean-main-grid">
-        {/* Left Column: Full Student Directory */}
-        <div className="clean-card clean-table-card">
+      {/* ── Main Layout: Department Distribution & Quick Registration ── */}
+      <div className="clean-departments-layout">
+        {/* Department Breakdown Card */}
+        <div className="clean-card clean-dept-main-card">
           <div className="clean-card-header">
             <div>
-              <h2 className="clean-card-title">Enrolled Students</h2>
-              <p className="clean-card-sub">Recent student records from the database</p>
+              <h2 className="clean-card-title">Departments</h2>
+              <p className="clean-card-sub" style={{ fontSize: '0.82rem', color: '#64748b', marginTop: '2px' }}>
+                Distribution of students across academic departments
+              </p>
             </div>
-            <div style={{ display: 'flex', gap: '10px' }}>
-              <Link to="/add-student" className="btn btn-primary btn-sm">+ Add Student</Link>
-              <Link to="/students" className="btn btn-secondary btn-sm">View All</Link>
-            </div>
+            <Link to="/departments" className="clean-link">See all &rarr;</Link>
           </div>
 
-          <div className="clean-table-responsive">
-            <table className="clean-table">
-              <thead>
-                <tr>
-                  <th>Student</th>
-                  <th>Student ID</th>
-                  <th>Department</th>
-                  <th>Semester</th>
-                  <th>Attendance</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {students.length === 0 ? (
-                  <tr>
-                    <td colSpan="6" style={{ textAlign: 'center', padding: '40px', color: '#94a3b8' }}>
-                      No students registered yet. Click <strong>+ Add Student</strong> to create your first record.
-                    </td>
-                  </tr>
-                ) : (
-                  students.map((st) => (
-                    <tr key={st._id}>
-                      <td>
-                        <div className="clean-user-cell">
-                          <div className="clean-avatar">{st.name.charAt(0).toUpperCase()}</div>
-                          <div>
-                            <div className="clean-user-name">{st.name}</div>
-                            <div className="clean-user-email">{st.email}</div>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <span className="clean-id-badge">{st.studentId}</span>
-                      </td>
-                      <td>
-                        <span className="clean-dept-pill">{st.department}</span>
-                      </td>
-                      <td>
-                        <span className="badge badge-primary">Semester {st.semester}</span>
-                      </td>
-                      <td>
-                        <span className={`badge ${st.attendance >= 75 ? 'badge-success' : 'badge-danger'}`} style={{ fontWeight: 600 }}>
-                          {st.attendance !== undefined ? `${st.attendance}%` : '85%'}
-                        </span>
-                      </td>
-                      <td>
-                        <button
-                          className="btn btn-ghost btn-sm"
-                          onClick={() => navigate('/students')}
-                        >
-                          View
-                        </button>
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+          <div className="clean-dept-list">
+            {topDepts.length === 0 ? (
+              <p style={{ color: '#94a3b8', fontSize: '0.85rem' }}>No department data yet.</p>
+            ) : (
+              topDepts.map((d) => {
+                const pct = totalCount > 0 ? Math.round((d.count / totalCount) * 100) : 0;
+                return (
+                  <div key={d._id} className="clean-dept-row">
+                    <div className="clean-dept-info">
+                      <span className="clean-dept-name">{d._id}</span>
+                      <span className="clean-dept-count">{d.count} student{d.count !== 1 ? 's' : ''} ({pct}%)</span>
+                    </div>
+                    <div className="clean-bar-track">
+                      <div className="clean-bar-fill" style={{ width: `${Math.max(pct, 6)}%` }} />
+                    </div>
+                  </div>
+                );
+              })
+            )}
           </div>
         </div>
 
-        {/* Right Column: Department Distribution & Quick Actions */}
-        <div className="clean-right-column">
-          {/* Department Breakdown */}
-          <div className="clean-card">
-            <div className="clean-card-header">
-              <h2 className="clean-card-title">Departments</h2>
-              <Link to="/departments" className="clean-link">See all</Link>
-            </div>
-
-            <div className="clean-dept-list">
-              {topDepts.length === 0 ? (
-                <p style={{ color: '#94a3b8', fontSize: '0.85rem' }}>No department data yet.</p>
-              ) : (
-                topDepts.map((d) => {
-                  const pct = totalCount > 0 ? Math.round((d.count / totalCount) * 100) : 0;
-                  return (
-                    <div key={d._id} className="clean-dept-row">
-                      <div className="clean-dept-info">
-                        <span className="clean-dept-name">{d._id}</span>
-                        <span className="clean-dept-count">{d.count} students</span>
-                      </div>
-                      <div className="clean-bar-track">
-                        <div className="clean-bar-fill" style={{ width: `${Math.max(pct, 6)}%` }} />
-                      </div>
-                    </div>
-                  );
-                })
-              )}
-            </div>
-          </div>
-
-          {/* Quick Action Banner */}
-          <div className="clean-card clean-cta-card">
-            <h3 className="clean-cta-title">Register a New Student</h3>
-            <p className="clean-cta-desc">
-              Add student profile details, assign departments, and track academic progress.
-            </p>
-            <button
-              className="btn btn-primary"
-              style={{ width: '100%', marginTop: '8px' }}
-              onClick={() => navigate('/add-student')}
-            >
-              + Go to Registration Form
-            </button>
-          </div>
+        {/* Quick Action Banner */}
+        <div className="clean-card clean-cta-card">
+          <h3 className="clean-cta-title">Register a New Student</h3>
+          <p className="clean-cta-desc">
+            Add student profile details, assign departments, and track academic progress.
+          </p>
+          <button
+            className="btn btn-primary"
+            style={{ width: '100%', marginTop: '14px' }}
+            onClick={() => navigate('/add-student')}
+          >
+            + Go to Registration Form
+          </button>
         </div>
       </div>
     </div>

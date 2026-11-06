@@ -149,18 +149,20 @@ const Reports = ({ showNotification }) => {
       </div>
 
       {/* ── Summary Cards ── */}
-      <div className="stats-grid" style={{ marginBottom: 24 }}>
+      <div className="reports-stats-grid">
         {[
-          { label: 'Total Students',   value: total,                  icon: '👥', color: 'primary' },
-          { label: 'Departments',      value: byDept.length,          icon: '🏛️', color: 'info' },
-          { label: 'Semesters Active', value: bySem.length,           icon: '📅', color: 'success' },
-          { label: 'Added This Week',  value: recentCount,            icon: '✨', color: 'warning' },
-        ].map(({ label, value, icon, color }, i) => (
-          <div key={label} className={`stat-card stat-card-${color} animate-in-delay-${i+1}`}>
-            <div className={`stat-icon stat-icon-${color}`} style={{ fontSize: '1.4rem' }}>{icon}</div>
-            <div className="stat-content">
-              <div className="stat-value">{value}</div>
-              <div className="stat-label">{label}</div>
+          { label: 'Total Students',   value: total,                  icon: '👥', bg: '#eff6ff', color: '#2563eb' },
+          { label: 'Departments',      value: byDept.length,          icon: '🏛️', bg: '#f5f3ff', color: '#7c3aed' },
+          { label: 'Semesters Active', value: bySem.length,           icon: '📅', bg: '#ecfdf5', color: '#059669' },
+          { label: 'Added This Week',  value: recentCount,            icon: '✨', bg: '#fffbeb', color: '#d97706' },
+        ].map(({ label, value, icon, bg, color }, i) => (
+          <div key={label} className="report-stat-card">
+            <div className="report-stat-icon" style={{ background: bg, color }}>
+              {icon}
+            </div>
+            <div className="report-stat-content">
+              <span className="report-stat-value">{value}</span>
+              <span className="report-stat-label">{label}</span>
             </div>
           </div>
         ))}
